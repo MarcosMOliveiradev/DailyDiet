@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  nome      String
+  password  String
+  createdAt DateTime @default(now())
+  Diet      Diet[]
+
+  @@map("user")
+}
+
+model Diet {
+  id          String   @id @default(uuid())
+  nome        String
+  descricao   String
+  data        DateTime @default(now())
+  dataUpdate  DateTime @updatedAt
+  dentroDieta Boolean
+
+  User   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  @@map("diet")
+}
